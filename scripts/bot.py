@@ -3,7 +3,8 @@ import os
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
-
+from interpreter import Interpreter
+import time
 """
 This is a bot 
 
@@ -11,6 +12,19 @@ This is a bot
 
 
 
+def elaborate_message(message: str) -> str:
+    """
+    This function takes a message as input and returns a string as output.
+    """
+
+    bot = Interpreter(message)
+    bot.run()
+    print("sleeping 5")
+    #time.sleep(5)
+    response = bot.get_response()
+
+
+    return response
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -22,8 +36,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         Ask me anything! """)
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
-
+    elaborated_text = elaborate_message(update.message.text)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=elaborated_text)
 
 if __name__ == '__main__':
     

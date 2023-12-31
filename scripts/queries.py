@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, exceptions
 import os
 from dotenv import load_dotenv
-
+import json
 
 
 class DB:
@@ -21,7 +21,26 @@ class DB:
                 print(f"The Neo4j service is not available: {e}")
 
 
-def get_itinerary(origin_IATA, destination_IATA):
+def get_itinerary(input):
+
+    """
+    Input: a json object with the following structure:
+        {
+            "origin_IATA": "MXP",
+            "destination_IATA": "USH"
+        }
+
+    Output: a json object with the following structure:
+        {
+            "shortest_itinerary": "MXP -> EZE with Aerolineas Argentinas\nEZE -> USH with Aerolineas Argentinas\n"
+        }
+    """
+    input = json.loads(input)
+    origin_IATA = input["origin_IATA"]
+    destination_IATA = input["destination_IATA"]
+    origin_IATA = origin_IATA.upper()
+    destination_IATA = destination_IATA.upper()
+
     load_dotenv()
     db = DB(os.getenv('NEO4J_URI'), os.getenv('NEO4J_USERNAME'), os.getenv('NEO4J_PASSWORD'))
     query_string = f""" 
@@ -40,9 +59,12 @@ def get_itinerary(origin_IATA, destination_IATA):
     for record in res:
         res_str += f"{record['From']} -> {record['To']} with {record['Airline']}\n"
     
-    return res_str
+    json_res = {
+        "shortest_itinerary": res_str
+    }
+    json_string = json.dumps(json_res)
+    return json_string
+
 
     
 
-result = get_itinerary("NRT", "USH")
-print(result)
