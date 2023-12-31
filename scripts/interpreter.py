@@ -9,7 +9,7 @@ from queries import get_itinerary
 
 class Interpreter:
 
-    def __init__(self, user_message: str):
+    def __init__(self):
 
         load_dotenv() 
         self.client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
@@ -20,15 +20,16 @@ class Interpreter:
         self.assistant_id = self.assistant.id
 
 
+        
+
+    def run(self, user_message: str):
+        
         message = self.client.beta.threads.messages.create(
         thread_id=self.thread.id,
         role="user",
         content=user_message
-    )
-        
+        )
 
-    def run(self):
-        
         # Create a new run for the given thread and assistant
         run = self.client.beta.threads.runs.create(
             thread_id=self.thread_id,

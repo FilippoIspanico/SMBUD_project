@@ -12,17 +12,13 @@ This is a bot
 
 
 
-def elaborate_message(message: str) -> str:
+def elaborate_message(bot : Interpreter, user_message: str) -> str:
     """
     This function takes a message as input and returns a string as output.
     """
-
-    bot = Interpreter(message)
-    bot.run()
-    print("sleeping 5")
+    bot.run(user_message=user_message)
     #time.sleep(5)
     response = bot.get_response()
-
 
     return response
 
@@ -32,18 +28,17 @@ logging.basicConfig(
 )
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="""Hi there! I'm a bot that can help you planning your flight. 
-                                        Ask me anything! """)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="""Hi there! I'm a bot that can help you planning your flight. Ask me anything! """)
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    elaborated_text = elaborate_message(update.message.text)
+    elaborated_text = elaborate_message(openAI_bot, update.message.text)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=elaborated_text)
 
 if __name__ == '__main__':
     
     # Load environment variables
     load_dotenv() 
-
+    openAI_bot = Interpreter()
     # Create application
     application = ApplicationBuilder().token(os.getenv('FLIGHTAI_TOKEN')).build()
     
