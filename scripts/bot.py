@@ -25,7 +25,7 @@ def elaborate_message(bot : Interpreter, user_message: str) -> str:
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
-)
+)   
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="""Hi there! I'm a bot that can help you planning your flight. Ask me anything! """)
