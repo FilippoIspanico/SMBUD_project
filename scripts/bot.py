@@ -3,24 +3,10 @@ import os
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, MessageHandler, filters
-from interpreter import Interpreter
+from interpreter import Interpreter, elaborate_message
 import time
-"""
-This is a bot 
-
-"""
 
 
-
-def elaborate_message(bot : Interpreter, user_message: str) -> str:
-    """
-    This function takes a message as input and returns a string as output.
-    """
-    bot.run(user_message=user_message)
-    #time.sleep(5)
-    response = bot.get_response()
-
-    return response
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',

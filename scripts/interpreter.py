@@ -75,6 +75,19 @@ class Interpreter:
                 break
             break
         return response
+        
+        
+        
+ 
+def elaborate_message(bot : Interpreter, user_message: str) -> str:
+    """
+    This function takes a message as input and returns a string as output.
+    """
+    bot.run(user_message=user_message)
+    #time.sleep(5)
+    response = bot.get_response()
+
+    return response
 
 #bot = Interpreter("I want to fly from MXP to USH")
 #bot.run()
